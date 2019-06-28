@@ -40,7 +40,7 @@ class User {
         });
     }
 
-    async get() {
+    get() {
       const params = {
         TableName: tableName
        };
@@ -119,6 +119,30 @@ class User {
             reject(error);
           }
           resolve(result);
+        });
+      });
+    }
+
+    isExist(email) {
+      const getParams = {
+        TableName: tableName,
+        Key: {
+          email,
+        },
+      };
+    
+      return new Promise((resolve, reject) => {
+        dynamoDb.get(getParams, (error, result) => {
+          if (error) {
+            console.log(error);
+            reject(false);
+          }
+      
+          if (result.Item) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
         });
       });
     }
